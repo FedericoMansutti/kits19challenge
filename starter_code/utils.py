@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import nibabel as nib
+import torch
 
 
 def get_full_case_id(cid):
@@ -50,4 +51,3 @@ def load_case(cid):
     vol = load_volume(cid)
     seg = load_segmentation(cid)
     return vol, seg
-
