@@ -81,7 +81,7 @@ class UNET(nn.Module):
 learning_rate = 0.002
 device = "cuda" if torch.cuda.is_available() else "cpu"
 batch_size = 4
-epochs = 2
+epochs = 1
 workers = 3
 
 
@@ -139,7 +139,7 @@ if __name__ == "__main__":
             volume, segmentation = load_case(patient)
 
             train_dataset = KitsDataset(volume, segmentation)
-            train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=workers)
+            train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=False, num_workers=workers)
 
             train_fn(model, optimizer, loss_fn, train_loader)
 
