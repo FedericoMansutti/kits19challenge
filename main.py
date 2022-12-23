@@ -77,11 +77,11 @@ class UNET(nn.Module):
         return self.last_conv(x)
 
 
-# Hyperparamters
+# Hyper parameters
 learning_rate = 0.002
 device = "cuda" if torch.cuda.is_available() else "cpu"
 batch_size = 4
-epochs = 1
+epochs = 4
 workers = 3
 
 
@@ -103,7 +103,7 @@ def train_fn(model, optimizer, loss_fn, loader):
         optimizer.step()
 
 
-def model_evaluation(loader):
+def model_evaluation(loader, patient_number):
     # accuracy test
     model.eval()
     total_pixels = 0
@@ -123,7 +123,7 @@ def model_evaluation(loader):
 
             total_correct = total_correct + np.sum(predictions == true_value)
 
-    print(f"accuracy is {(total_correct/total_pixels)*100}")
+    print(f"accuracy of patient {50+patient_number} is {(total_correct/total_pixels)*100}")
 
 
 if __name__ == "__main__":
@@ -133,10 +133,10 @@ if __name__ == "__main__":
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     for epoch in range(epochs):
-        for idx, patient in enumerate(range(20)):
-            print("training case" + str(idx))
+        for patient in range(50):
+            print("training case" + str(patient))
             # loading images of case idx
-            volume, segmentation = load_case(0)
+            volume, segmentation = load_case(patient)
 
             train_dataset = KitsDataset(volume, segmentation)
             train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=workers)
@@ -144,9 +144,9 @@ if __name__ == "__main__":
             train_fn(model, optimizer, loss_fn, train_loader)
 
     # loading validation test patient
-    valid_volume, valid_segmentation = load_case(51)  # util function given from the challenge starter code
-    valid_dataset = KitsDataset(valid_volume, valid_segmentation)
-    valid_loader = DataLoader(dataset=valid_dataset, batch_size=batch_size, shuffle=False)
-
-    model_evaluation(valid_loader)
+    for patient in range(5):
+        valid_volume, valid_segmentation = load_case(50+patient)  # util function given from the challenge starter code
+        valid_dataset = KitsDataset(valid_volume, valid_segmentation)
+        valid_loader = DataLoader(dataset=valid_dataset, batch_size=batch_size, shuffle=False)
+        model_evaluation(valid_loader, patient)
 
