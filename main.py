@@ -81,7 +81,7 @@ class UNET(nn.Module):
 learning_rate = 0.002
 device = "cuda" if torch.cuda.is_available() else "cpu"
 batch_size = 4
-epochs = 4
+epochs = 2
 workers = 3
 
 
@@ -133,7 +133,7 @@ if __name__ == "__main__":
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     for epoch in range(epochs):
-        for patient in range(50):
+        for patient in range(20):
             print("training case" + str(patient))
             # loading images of case idx
             volume, segmentation = load_case(patient)
