@@ -3,6 +3,7 @@ import torch
 
 class KitsDataset(Dataset):
     def __init__(self, volume, segmentation):
+        # conversion to tensor
         self.volume = torch.from_numpy(volume.get_fdata())
         self.segmentation = torch.from_numpy(segmentation.get_fdata())
 
